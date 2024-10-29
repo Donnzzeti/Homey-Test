@@ -1,0 +1,82 @@
+/ app/views/projects/show.html.slim
+.w-full.min-h-screen.bg-gray-900.text-white
+  .max-w-6xl.mx-auto.px-4.py-8
+    .mb-4
+      h1.text-2xl.font-bold.text-white = @project.name
+
+    .mb-6
+      p.text-lg.text-gray-400
+        | Status:
+        = @project.status
+
+    .grid.grid-cols-2.gap-4
+      / Comments Section
+      .comments-section
+        h2.text-xl.font-semibold.mb-2.text-gray-200 Comments
+        .bg-gray-800.p-4.rounded-lg.max-h-60.overflow-y-auto
+          ul.space-y-4
+            - @comments.each do |comment|
+              li.flex.items-start.space-x-3
+                .flex-shrink-0
+                  .h-8.w-8.rounded-full.bg-gray-700.flex.items-center.justify-center.text-sm.text-gray-400
+                    - if comment.user
+                      = comment.user.email[0].upcase
+                    - elsif comment.admin
+                      = comment.admin.email[0].upcase
+                .comment-content
+                  p.text-gray-300.text-sm = comment.content
+                  p.text-gray-500.text-xs
+                    | commented by
+                    - if comment.user
+                      = comment.user.email
+                    - elsif comment.admin
+                      = t('admin_label')
+                    |  -
+                    = comment.created_at.strftime("%B %d, %Y")
+
+      / Status Change History Section
+      .status-change-history
+        h2.text-xl.font-semibold.mb-2.text-gray-200 Status Change History
+        .bg-gray-800.p-4.rounded-lg.max-h-60.overflow-y-auto
+          ul.space-y-4
+            - @status_changes.each do |status_change|
+              li.flex.items-start.space-x-3
+                .flex-shrink-0
+                  .h-8.w-8.rounded-full.bg-gray-700.flex.items-center.justify-center.text-sm.text-gray-400
+                    - if status_change.user
+                      = status_change.user.email[0].upcase
+                    - elsif status_change.admin
+                      = status_change.admin.email[0].upcase
+                .status-change-content
+                  p.text-gray-300.text-sm = status_change.status
+                  p.text-gray-500.text-xs
+                    | changed by
+                    - if status_change.user
+                      = status_change.user.email
+                    - elsif status_change.admin
+                      = t('admin_label')
+                    |  -
+                    = status_change.created_at.strftime("%B %d, %Y")
+
+    / Add Comment Form
+    .mt-6
+      h2.text-xl.font-semibold.mb-2.text-gray-200 Add a comment
+      = form_with(model: [@project, @project.comments.build], local: true, class: "space-y-4") do |form|
+        .form-group
+          = form.label :content, class: "block text-sm font-medium text-gray-400"
+          = form.text_area :content, rows: 3, class: "mt-1 w-full bg-gray-700 text-white border border-gray-600 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+        .form-group
+          = form.submit 'Add Comment', class: "inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg"
+
+    / Change Status Form
+    .mt-6
+      h2.text-xl.font-semibold.mb-2.text-gray-200 Change Status
+      = form_with(model: @project, local: true, class: "space-y-4") do |form|
+        .form-group
+          = form.label :status, class: "block text-sm font-medium text-gray-400"
+          = form.text_field :status, class: "mt-1 w-full bg-gray-700 text-white border border-gray-600 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+        .form-group
+          = form.submit 'Update Status', class: "inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg"
+
+    .mt-6
+      = link_to 'Back to Projects', projects_path, class: "inline-flex items-center px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white text-sm font-medium rounded-lg"

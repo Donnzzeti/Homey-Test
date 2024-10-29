@@ -1,19 +1,45 @@
+<!-- app/views/layouts/application.html.erb -->
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>HomeyProject</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <%= csrf_meta_tags %>
-    <%= csp_meta_tag %>
-    <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
+<head>
+  <title>HomeyProject</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  <%= javascript_importmap_tags %>
+</head>
+<body class="bg-gray-900 text-white">
+<div class="flex justify-end p-4 space-x-2">
+  <%= button_to "Home", root_path, method: :get, class: "btn-primary" %>
+  <% if user_signed_in?  %>
+    <%= button_to "Sign out", destroy_user_session_url, method: :delete, class: "btn-primary" %>
+  <% else %>
+    <% unless admin_signed_in? %>
+      <%= button_to "Sign in", new_user_session_url, method: :get, class: "btn-primary" %>
+      <%= button_to "Admin Sign in", new_admin_session_url, method: :get, class: "btn-primary" %>
+      <%= button_to "Sign up", new_user_registration_url, method: :get, class: "btn-primary" %>
+    <% end %>
+  <% end %>
+  <% if admin_signed_in? %>
+    <%= button_to "Admin sign out", destroy_admin_session_url, method: :delete, class: "btn-primary" %>
+  <% end %>
+</div>
 
-    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-    <%= javascript_importmap_tags %>
-  </head>
+<div class="p-4">
+  <% if notice %>
+    <div class="mb-4 p-4 bg-blue-500 text-white rounded-lg">
+      <%= notice %>
+    </div>
+  <% end %>
+  <% if alert %>
+    <div class="mb-4 p-4 bg-red-500 text-white rounded-lg">
+      <%= alert %>
+    </div>
+  <% end %>
+</div>
 
-  <body>
-    <main class="container mx-auto mt-28 px-5 flex">
-      <%= yield %>
-    </main>
-  </body>
+<%= yield %>
+</body>
 </html>

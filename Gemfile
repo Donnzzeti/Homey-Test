@@ -47,9 +47,23 @@ gem "bootsnap", require: false
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
 
+# Devise is a flexible authentication solution for Rails based on Warden
+gem 'devise', '~> 4.9.4'
+
+gem 'slim', '~> 5.2.1' # A lightweight templating engine for Rails 3+.
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ]
+  # factory_bot_rails provides integration between factory_bot and rails 5.0 or newer
+  gem 'factory_bot_rails', '~> 6.4', '>= 6.4.4'
+  # rspec-rails is a testing framework for Rails 5+.
+  gem 'rspec-rails', '~> 7.0', '>= 7.0.1'
+  # Letter Opener is a gem that opens a preview in the browser instead of sending an email.
+  gem 'letter_opener', '~> 1.10'
+  gem 'byebug'
+  gem 'rubocop', '~> 1.67' # A Ruby static code analyzer and formatter based on the community Ruby style guide.
+
 end
 
 group :development do
@@ -67,4 +81,8 @@ group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
   gem "selenium-webdriver"
+  gem 'faker', '~> 3.5.1' # A library for generating fake data such as names, addresses, and phone numbers.
+  gem 'rails-controller-testing', '~> 1.0.5' # Brings back assigns and assert_template for Rails 5.1+.
+
 end
+
